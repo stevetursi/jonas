@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jonas</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.3/jquery.min.js"></script>
+    <script language="javascript">
+
+        $(document).ready(function(){
+            updateBanner();
+
+            $("#doIt").click( function() {
+                var selection = $("#visitor-type").val();
+
+                if (selection != null) {
+                    createCookie("vtype", selection, 1000);
+                    updateBanner();
+                }
+            });
+        });
+
+        function updateBanner() {
+            $(".banneroption").hide();
+            $("#cookieValue").text(readCookie("vtype")==null?'null':readCookie("vtype"));
+
+            switch(readCookie("vtype")) {
+                case 'alumni':
+                    $("#banner-alumni").show();
+                    $("#visitor-type").val('alumni');
+                    break;
+                case 'student':
+                    $("#banner-student").show();
+                    $("#visitor-type").val('student');
+                    break;
+                case 'student':
+                    $("#visitor-type").val('candidate');
+                default:
+                    $("#banner-candidate").show();
+            }
+        }
+
+
+        // I ripped these three functions off stackoverflow.
+        // credit where credit's due: http://stackoverflow.com/a/24103596/1181
+        function createCookie(name,value,days) {
+            if (days) {
+                var date = new Date();
+                date.setTime(date.getTime()+(days*24*60*60*1000));
+                var expires = "; expires="+date.toGMTString();
+            }
+            else var expires = "";
+            document.cookie = name+"="+value+expires+"; path=/";
+        }
+
+        function readCookie(name) {
+            var nameEQ = name + "=";
+            var ca = document.cookie.split(';');
+            for(var i=0;i < ca.length;i++) {
+                var c = ca[i];
+                while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+            }
+            return null;
+        }
+
+        function eraseCookie(name) {
+            createCookie(name,"",-1);
+        }
+
+
+    </script>
+
+    <style>
+        .banneroption {
+            display: none;
+        }
+
+    </style>
+
+</head>
+<body>
+
+    <div class="banneroption" id="banner-alumni">This is the Header for Alumni</div>
+
+    <div class="banneroption" id="banner-student">This is Header for Students</div>
+
+    <div class="banneroption" id="banner-candidate">This is the header for Prospective Students</div>
+
+<hr />
+
+    <div id="user-selection-form">
+        What kind of person are you?<br />
+        <select id="visitor-type">
+            <option></option>
+            <option value="student">student</option>
+            <option value="alumni">alumni</option>
+            <option value="candidate">prospective studant</option>
+        </select>
+
+        <button id="doIt">do it</button>
+
+    </div>
+
+
+<hr />
+
+<div id="cookieMessage">
+    The cookie value is [<span id="cookieValue"></span>]
+</div>
+
+</body>
+</html>
